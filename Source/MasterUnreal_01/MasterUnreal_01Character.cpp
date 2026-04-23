@@ -149,13 +149,14 @@ void AMasterUnreal_01Character::CreateItem()
 				BaseItem->SetTitle(TEXT("Check"));
 			else
 				BaseItem->SetTitle(TEXT("BeCheck"));
+
 			arr_Bag.Add(BaseItem);
 		}
 	}
 	Update_Bag_Data();
 	UploadingData();
 
-	Title.Add(TEXT("Check"));
+	Title.Add(TEXT("Check")); // 칭호 획득
 	for (TMap<int32, AActor*>::TIterator it = map_BagData.CreateIterator(); it; ++it)
 	{
 		ABaseItem* Item = Cast< ABaseItem>(it->Value);
