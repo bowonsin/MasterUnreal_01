@@ -15,6 +15,8 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+
+class ABaseItem;
 UCLASS(config=Game)
 class AMasterUnreal_01Character : public ACharacter
 {
@@ -68,5 +70,33 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bag")
+	TArray <AActor*> arr_Bag;
+
+	// 간단하게 int 값으로 처리하도록 하자
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bag")
+	TMap <int32,AActor*> map_BagData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bag")
+	TSet<FName> Title;
+
+	
+	// 아이템을 만들어서 Bag 에 넣는다.
+	void CreateItem();
+
+	//Map 에 만든 Item 쑤셔넣기
+	void Update_Bag_Data();
+
+	// 완전히 다 만들어진 BagData를 출력하는 함수 
+	void UploadingData();
+
+
+	bool TitleCheck(ABaseItem* item);
+
+	
+
 };
 

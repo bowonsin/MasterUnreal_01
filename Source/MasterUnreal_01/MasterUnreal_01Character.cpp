@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "BaseItem.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,6 +53,8 @@ AMasterUnreal_01Character::AMasterUnreal_01Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	CreateItem();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -105,7 +108,7 @@ void AMasterUnreal_01Character::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
@@ -114,7 +117,6 @@ void AMasterUnreal_01Character::Move(const FInputActionValue& Value)
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
-
 void AMasterUnreal_01Character::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -126,4 +128,75 @@ void AMasterUnreal_01Character::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+
+void AMasterUnreal_01Character::CreateItem()
+{
+	if (!GetWorld()) return;
+
+	// 아이템 제작
+	for (int32 i = 0; i < 30; i++)
+	{
+		FVector Location = GetActorLocation() + FVector(i*50.f, 0.f, 0.f);
+		FRotator Rotation = FRotator::ZeroRotator;
+
+		AActor* Item = GetWorld()->SpawnActor<ABaseItem>(Location, Rotation);
+		ABaseItem* BaseItem = Cast<ABaseItem>(Item);
+		if (BaseItem)
+		{
+			if (i % 2)
+				BaseItem->SetTitle(TEXT("Check"));
+			else
+				BaseItem->SetTitle(TEXT("BeCheck"));
+			arr_Bag.Add(BaseItem);
+		}
+	}
+	Update_Bag_Data();
+	UploadingData();
+
+	Title.Add(TEXT("Check"));
+	for (TMap<int32, AActor*>::TIterator it = map_BagData.CreateIterator(); it; ++it)
+	{
+		ABaseItem* Item = Cast< ABaseItem>(it->Value);
+		if (Item)
+		{
+			if (TitleCheck(Item))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Actor Name : %s Use Ok"), *it->Value->GetActorNameOrLabel());
+
+			}
+		}
+	}
+}
+
+void AMasterUnreal_01Character::Update_Bag_Data()
+{
+	map_BagData.Empty();
+
+	for (int32 i = 0; i < arr_Bag.Num(); i++)
+		map_BagData.Add(i,arr_Bag[i]);
+
+}
+
+void AMasterUnreal_01Character::UploadingData()
+{
+	for (TMap<int32, AActor*>::TIterator it = map_BagData.CreateIterator(); it; ++it)
+	{
+		//*it->Value->GetActorNameOrLabel() 에디터기준 이름 출력  / 
+		UE_LOG(LogTemp, Warning, TEXT("Actor Name : %s  / Actor Key : %d"), *it->Value->GetActorNameOrLabel(), it->Key);
+	}
+}
+
+bool AMasterUnreal_01Character::TitleCheck(ABaseItem* item)
+{
+	if (!item) return false;
+
+	FName Title_Check = item->GetTitleName();
+	if (!Title_Check.IsNone() && !Title.Contains(Title_Check))
+	{
+		return false;
+	}
+
+	return true;
 }
