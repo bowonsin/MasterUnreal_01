@@ -12,6 +12,11 @@
 #include "InputActionValue.h"
 #include "BaseItem.h"
 
+#include "FireDamageType.h"
+#include "Engine/DamageEvents.h"
+
+
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -200,4 +205,40 @@ bool AMasterUnreal_01Character::TitleCheck(ABaseItem* item)
 	}
 
 	return true;
+}
+
+float AMasterUnreal_01Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	//#include "Engine/DamageEvents.h" 이게 선언되어야 함
+	const UFireDamageType* FireDamage = DamageEvent.DamageTypeClass->GetDefaultObject<UFireDamageType>();
+
+	// 옛날 방식
+	//const UDamageType* DT2 = Cast<UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject());
+
+	if (FireDamage && FireDamage->bCausedByWorld)
+	{
+		// 화상 
+
+		// 1.f 는 일반 데미지
+		ActualDamage *= (1.f + FireDamage->ArmorPenetration);
+
+		// 화상효과 !! 이펙트 .. 또는 사운드!!
+
+		UE_LOG(LogTemp, Warning, TEXT("ByWorld Damage Recived"));
+	}
+
+	// 일반적으로 공격을 받았다.
+	if (EventInstigator)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Im Enemy!"));
+
+	}
+
+	// HP 있으면 HP -= ActualDamage;
+
+
+
+	return ActualDamage;
 }
