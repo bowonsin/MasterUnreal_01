@@ -46,6 +46,9 @@ class AMasterUnreal_01Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShootAction;
+
 public:
 	AMasterUnreal_01Character();
 	
@@ -57,6 +60,10 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void Shoot(const FInputActionValue& Value);
+
+	
 			
 
 protected:

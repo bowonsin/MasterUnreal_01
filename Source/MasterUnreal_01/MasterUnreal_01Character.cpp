@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "BaseItem.h"
+#include "GunActor.h"
 
 #include "FireDamageType.h"
 #include "Engine/DamageEvents.h"
@@ -59,6 +60,8 @@ AMasterUnreal_01Character::AMasterUnreal_01Character()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
+	
+
 	CreateItem();
 }
 
@@ -93,6 +96,8 @@ void AMasterUnreal_01Character::SetupPlayerInputComponent(UInputComponent* Playe
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMasterUnreal_01Character::Look);
+
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AMasterUnreal_01Character::Shoot);
 	}
 	else
 	{
@@ -132,6 +137,27 @@ void AMasterUnreal_01Character::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AMasterUnreal_01Character::Shoot(const FInputActionValue& Value)
+{
+	if (Controller != nullptr)
+	{
+		UChildActorComponent* ChildComp = FindComponentByClass<UChildActorComponent>();
+		if (ChildComp)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Gun OK"));
+			AActor* ChildActor = ChildComp->GetChildActor(); // ⭐ 핵심
+			AGunActor* ShotGun = Cast<AGunActor>(ChildActor);
+			if(ShotGun)
+				ShotGun->ShootingGun();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Gun NULL"));
+		}
+		
 	}
 }
 
