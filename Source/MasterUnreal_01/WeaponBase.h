@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GunActor.generated.h"
+#include "WeaponBase.generated.h"
 
 UCLASS()
-class MASTERUNREAL_01_API AGunActor : public AActor
+class MASTERUNREAL_01_API AWeaponBase : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AGunActor();
+	AWeaponBase();
 
 protected:
 	// Called when the game starts or when spawned
@@ -21,13 +21,13 @@ protected:
 
 public:	
 	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Gun")
-	USceneComponent* Scene;
+public:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Gun")
-	TObjectPtr<UStaticMeshComponent> Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<USceneComponent> Root;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UArrowComponent> FirePoint;
@@ -35,16 +35,7 @@ public:
 	UFUNCTION(BlueprintCallable) //BlueprintImplementableEvent
 	virtual void Fire();
 
-	void ReboundGun(float DeltaTime);
-
-	void ShootingGun();
-
-	float MaxAngle;
-	float MinAngle;
-	float CurAngle;
-
-	bool ShootChecking;
-	bool UpDownChecking;
+protected:
 
 	//소모되는 탄약수
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -80,7 +71,4 @@ public:
 
 	UFUNCTION()
 	void HandleFireDelay();
-
-
-
 };

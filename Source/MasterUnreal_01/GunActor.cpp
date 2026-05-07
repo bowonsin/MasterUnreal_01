@@ -4,6 +4,7 @@
 #include "GunActor.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/ArrowComponent.h"
 // Sets default values
 AGunActor::AGunActor()
 {
@@ -16,11 +17,22 @@ AGunActor::AGunActor()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Scene);
 
+	FirePoint = CreateDefaultSubobject<UArrowComponent>(TEXT("FirePoint"));
+	FirePoint->SetupAttachment(Mesh);
+
 	MaxAngle = 50.0f;
 	MinAngle = 0.0f;
 
 	ShootChecking = false;
 	UpDownChecking = true;
+
+	AmmoPerFire = 1;
+	CurrentAmmo = 0;
+	MaxAmmo = 12;
+	RoF = 1.f;
+	CanFire = true;
+	Range = 1000.f;
+	DamagePerHit = 100.f;
 }
 
 // Called when the game starts or when spawned
@@ -75,3 +87,15 @@ void AGunActor::ShootingGun()
 	ShootChecking = true;
 }
 
+void AGunActor::Fire()
+{
+	CanFire = false;
+
+	GetWorld()->GetTimerManager().SetTimer(TimerFireDelay, this, &AGunActor::HandleFireDelay, 1.f / RoF, false);
+}
+void AGunActor::HandleFireDelay()
+{
+	GetWorld()->GetTimerManager().ClearTimer(TimerFireDelay);
+
+	CanFire = true;
+}

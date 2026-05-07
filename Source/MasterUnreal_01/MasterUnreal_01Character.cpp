@@ -147,15 +147,10 @@ void AMasterUnreal_01Character::Shoot(const FInputActionValue& Value)
 		UChildActorComponent* ChildComp = FindComponentByClass<UChildActorComponent>();
 		if (ChildComp)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Gun OK"));
 			AActor* ChildActor = ChildComp->GetChildActor(); // ⭐ 핵심
 			AGunActor* ShotGun = Cast<AGunActor>(ChildActor);
 			if(ShotGun)
 				ShotGun->ShootingGun();
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Gun NULL"));
 		}
 		
 	}

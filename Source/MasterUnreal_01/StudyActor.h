@@ -27,7 +27,7 @@ public:
 
 	void StartAsyncTarce();
 
-	// 이게 델리게이트 인자이다
+	//
 	void OnAsyncTraceCompleted(const FTraceHandle& Handle, FTraceDatum& Data);
 
 };
