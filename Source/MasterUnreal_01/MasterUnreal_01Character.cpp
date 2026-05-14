@@ -227,7 +227,7 @@ bool AMasterUnreal_01Character::TitleCheck(ABaseItem* item)
 
 	return true;
 }
-
+/*
 float AMasterUnreal_01Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -263,3 +263,4 @@ float AMasterUnreal_01Character::TakeDamage(float DamageAmount, FDamageEvent con
 
 	return ActualDamage;
 }
+ */
