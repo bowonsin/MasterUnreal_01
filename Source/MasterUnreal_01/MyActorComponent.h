@@ -31,6 +31,12 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FHealthDamagedSignature OnHealthDamaged;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Health")
+	TSubclassOf<UUserWidget> HUDWidgetClass;
+	
+	UPROPERTY()
+	UUserWidget* HUDWidgetInstance;
 
 protected:
 	// Called when the game starts

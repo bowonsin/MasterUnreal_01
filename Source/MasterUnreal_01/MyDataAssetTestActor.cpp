@@ -41,6 +41,7 @@ void AMyDataAssetTestActor::StartLoading()
 
 void AMyDataAssetTestActor::OnLoadFinished(FPrimaryAssetId LoadedId)
 {
+	/*
 	LoadedItem = Cast<UMyItemData>(UAssetManager::Get().GetPrimaryAssetObject(LoadedId));
 	if (LoadedItem)
 	{
@@ -48,4 +49,5 @@ void AMyDataAssetTestActor::OnLoadFinished(FPrimaryAssetId LoadedId)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Msg);
 		// 실제로 메시를 교체... 수치 적용..~~~~~~~~~
 	}
+	*/
 }

@@ -2,14 +2,14 @@
 
 
 #include "MyActorComponent.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 
 
 
 // Sets default values for this component's properties
 UMyActorComponent::UMyActorComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
 	MaxHealth = 100.0f;
@@ -24,6 +24,16 @@ void UMyActorComponent::BeginPlay()
 	CurrentHealth= MaxHealth;
 	// 이름을 굳이 곧대로 박는게 가독성이 좋다.
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UMyActorComponent::DamageTake);
+	
+	// 1. 여기서 위젯을 한 번만 생성합니다.
+	if (HUDWidgetClass)
+	{
+		HUDWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
+		if (HUDWidgetInstance)
+		{
+			HUDWidgetInstance->AddToViewport(); // 화면에 추가!
+		}
+	}
 }
 
 void UMyActorComponent::DamageTake(
@@ -40,6 +50,15 @@ void UMyActorComponent::DamageTake(
 	
 	//
 	OnHealthDamaged.Broadcast(CurrentHealth,MaxHealth,FinalDamage);
+	
+	if (HUDWidgetInstance)
+	{
+		if (UTextBlock* HelthText = Cast<UTextBlock>(HUDWidgetInstance->GetWidgetFromName(TEXT("Helth"))))
+		{
+			FString HealthString = FString::Printf(TEXT("HP : %.0f / %.0f"), CurrentHealth, MaxHealth);
+			HelthText->SetText(FText::FromString(HealthString));
+		}
+	}
 	if (CurrentHealth <= 0.0f)
 	{
 		// Instigator는 떄린 actor의 정보를 가져오는 것이다.

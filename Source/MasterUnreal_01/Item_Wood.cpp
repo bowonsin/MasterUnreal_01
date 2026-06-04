@@ -19,7 +19,7 @@ void AItem_Wood::OnFireDected_Implementation(float Temperature, FVector HitLocat
 			,FireEffects
 			,GetActorLocation()// this 좌표
 			,GetActorRotation() // this 회전
-			,FVector(1.f)
+			,FVector(1.f) // Scale 크기
 			);
 	}
 		

@@ -4,11 +4,18 @@
 #include "MyTochlight.h"
 #include "TestMyInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
-// Sets default values
 AMyTochlight::AMyTochlight()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	for ( const TWeakObjectPtr<AActor>& Item :Items)
+	{
+		if (UKismetSystemLibrary::DoesImplementInterface(Item.Get(), UTestMyInterface::StaticClass()))
+		{
+			ITestMyInterface::Execute_OnFireDected(Item.Get(),100.0f,FVector::ZeroVector);
+		}
+		// 해당 클레스에 인터페이스가 구현이 되어 있느냐
+	}
 
 }
 
@@ -20,7 +27,6 @@ void AMyTochlight::BeginPlay()
 	//시작할 떄
 	for (const TWeakObjectPtr<AActor>& Item : Items)
 	{
-		/*
 		// 로컬 변수로 만듦 Item을 
 		// #include "TestMyIterface 호출해야 사용할수 있따.
 		//Get() 함수의 역할
@@ -28,12 +34,11 @@ void AMyTochlight::BeginPlay()
 		//메모리 관리(참조 횟수 계산 등)를 대신 해주지만,
 		//Cast나 다른 일반 포인터를 받는 함수에 넣으려면 안에 들어있는 실제 주소값이 필요합니다.
 		// 이렇게 가져오면 CPP 에서 밖에 사용하지 못한다.
-		 ITestMyInterface* MyInterface = Cast<ITestMyInterface>(Item.Get()); 
-		if (MyInterface)
-		{
-			MyInterface->OnFireDected(100.0f,FVector::ZeroVector);
-		}
-		 */
+		//ITestMyInterface* MyInterface = Cast<ITestMyInterface>(Item.Get()); 
+		//if (MyInterface)
+		//{
+		//	MyInterface->OnFireDected(100.0f,FVector::ZeroVector);
+		//}
 		if (Item.IsValid())
 		{
 			//does임플리먼트 interface

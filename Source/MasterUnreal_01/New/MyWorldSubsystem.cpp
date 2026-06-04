@@ -26,7 +26,5 @@ void UMyWorldSubsystem::Deinitialize()
 {
 	UE_LOG(LogTemp, Warning, TEXT("My Subsystem End"));
 
-	Super::Deinitialize();
-	
-	
+	Super::Deinitialize();	
 }
