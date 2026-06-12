@@ -27,3 +27,19 @@ struct FPooledObjectData
 	UPROPERTY(EditAnywhere)
 	FString ActorName;
 };
+
+USTRUCT(BlueprintType)
+struct FSingleObjectPool
+{
+	GENERATED_BODY()
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
+	TArray<TObjectPtr<class UPooledObject>> PooledObjects;
+	//TArray<UPooledObject*> PooledObjectsPool; 이 형태랑 같다고 보면 됨.. 
+};
+USTRUCT(BlueprintType)
+struct FSingleObjectPoolInstance
+{
+	GENERATED_BODY()
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
+	TArray<TObjectPtr<class UInstanceObjectPool>> PooledObjects;
+};

@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "MyObjectPool.h"
 #include "PooledObject.generated.h"
-
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MASTERUNREAL_01_API UPooledObject : public UActorComponent

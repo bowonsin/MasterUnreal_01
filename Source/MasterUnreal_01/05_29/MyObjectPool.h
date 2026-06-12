@@ -8,14 +8,6 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPoolerCleanupSignature);
 
-
-USTRUCT(BlueprintType)
-struct FSingleObjectPool
-{
-	GENERATED_BODY()
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
-	TArray<TObjectPtr<class UPooledObject>> PooledObjects;
-};
 UCLASS()
 class MASTERUNREAL_01_API AMyObjectPool : public AActor
 {
@@ -28,8 +20,10 @@ public:
 	UPROPERTY()
 	FPoolerCleanupSignature OnPoolerCleanup;
 	//소환한 액터들을 이름과 매칭해서 가져가기
+	
 	UFUNCTION(BlueprintCallable)
 	AActor* GetPooledActor(FString Name);
+	
 	//액터를 넘겨주면 회수할 수 있도록 만들어주기
 	UFUNCTION(BlueprintCallable)
 	void RecycleActor(AActor* PooledActor);
